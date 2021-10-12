@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"github.com/mr-tron/base58"
+
 )
 
 const (
