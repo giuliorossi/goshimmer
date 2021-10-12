@@ -25,8 +25,8 @@ func printBanner() {
 	fmt.Println("IOTA 2.0 DevNet CLI-Wallet 0.2")
 }
 
-func loadWallet() *wallet.Wallet {
-	seed, lastAddressIndex, spentAddresses, assetRegistry, err := importWalletStateFile("wallet.dat")
+func loadWallet(filecontent string) *wallet.Wallet {
+	seed, lastAddressIndex, spentAddresses, assetRegistry, err := importWalletStateFile(filecontent, "wallet.dat")
 	if err != nil {
 		panic(err)
 	}
@@ -62,17 +62,9 @@ func loadWallet() *wallet.Wallet {
 	return wallet.New(walletOptions...)
 }
 
-func importWalletStateFile(filename string) (seed *walletseed.Seed, lastAddressIndex uint64, spentAddresses []bitmask.BitMask, assetRegistry *wallet.AssetRegistry, err error) {
-	walletStateBytes, err := os.ReadFile(filename)
-	if err != nil {
-		if !os.IsNotExist(err) {
-			return
-		}
-
-		if len(os.Args) < 2 || os.Args[1] != "init" {
-			printUsage(nil, "no wallet file (wallet.dat) found: please call \""+filepath.Base(os.Args[0])+" init\"")
-		}
-
+func importWalletStateFile(filecontent string, filename string) (seed *walletseed.Seed, lastAddressIndex uint64, spentAddresses []bitmask.BitMask, assetRegistry *wallet.AssetRegistry, err error) {
+	// walletStateBytes, err := os.ReadFile(filename)
+	if filecontent == "init" {
 		seed = walletseed.NewSeed()
 		lastAddressIndex = 0
 		spentAddresses = []bitmask.BitMask{}
@@ -91,9 +83,40 @@ func importWalletStateFile(filename string) (seed *walletseed.Seed, lastAddressI
 		return
 	}
 
-	if len(os.Args) >= 2 && os.Args[1] == "init" {
-		printUsage(nil, "please remove the wallet.dat before trying to create a new wallet")
-	}
+
+	walletStateBytes, err := base58.decode(filecontent)
+	
+
+	//if err != nil {
+	//	if !os.IsNotExist(err) {
+	//		return
+	//	}
+//
+	//	if len(os.Args) < 2 || os.Args[1] != "init" {
+	//		printUsage(nil, "no wallet file (wallet.dat) found: please call \""+filepath.Base(os.Args[0])+" init\"")
+	//	}
+//
+	//	seed = walletseed.NewSeed()
+	//	lastAddressIndex = 0
+	//	spentAddresses = []bitmask.BitMask{}
+	//	err = nil
+//
+	//	fmt.Println("GENERATING NEW WALLET ...                                 [DONE]")
+	//	fmt.Println()
+	//	fmt.Println("================================================================")
+	//	fmt.Println("!!!            PLEASE CREATE A BACKUP OF YOUR SEED           !!!")
+	//	fmt.Println("!!!                                                          !!!")
+	//	fmt.Println("!!!       " + base58.Encode(seed.Bytes()) + "       !!!")
+	//	fmt.Println("!!!                                                          !!!")
+	//	fmt.Println("!!!            PLEASE CREATE A BACKUP OF YOUR SEED           !!!")
+	//	fmt.Println("================================================================")
+//
+	//	return
+	//}
+
+	//if len(os.Args) >= 2 && os.Args[1] == "init" {
+	//	printUsage(nil, "please remove the wallet.dat before trying to create a new wallet")
+	//}
 
 	marshalUtil := marshalutil.New(walletStateBytes)
 
@@ -136,7 +159,6 @@ func writeWalletStateFile(wallet *wallet.Wallet, filename string) {
 			panic(err)
 		}
 	}
-
 	err = os.WriteFile(filename, wallet.ExportState(), 0o644)
 	if err != nil {
 		panic(err)

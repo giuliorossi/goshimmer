@@ -49,8 +49,8 @@ func main() {
 	}
 
 	// load wallet
-	wallet := loadWallet()
-	defer writeWalletStateFile(wallet, "wallet.dat")
+	wallet := loadWallet(os.Args[len(os.Args)-1])
+	// defer writeWalletStateFile(wallet, "wallet.dat")
 
 	// check if parameters potentially include sub commands
 	if len(os.Args) < 2 {
