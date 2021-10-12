@@ -50,6 +50,8 @@ func main() {
 
 	// load wallet
 	wallet := loadWallet(os.Args[len(os.Args)-1])
+	fmt.Println("####"+base58.Encode(wallet.ExportState())+"####")
+
 	// defer writeWalletStateFile(wallet, "wallet.dat")
 
 	// check if parameters potentially include sub commands

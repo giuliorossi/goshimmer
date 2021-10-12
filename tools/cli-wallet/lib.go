@@ -84,7 +84,7 @@ func importWalletStateFile(filecontent string, filename string) (seed *walletsee
 	}
 
 
-	walletStateBytes, err := base58.decode(filecontent)
+	walletStateBytes, err := base58.Decode(filecontent)
 	
 
 	//if err != nil {
