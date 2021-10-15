@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
-	"github.com/mr-tron/base58"
+	// "github.com/mr-tron/base58"
 
 )
 
@@ -52,9 +52,9 @@ func main() {
 
 	// load wallet
 	wallet := loadWallet(os.Args[len(os.Args)-1])
-	fmt.Println("####"+base58.Encode(wallet.ExportState())+"####")
+	// defer fmt.Println("####"+base58.Encode(wallet.ExportState())+"####")
 
-	// defer writeWalletStateFile(wallet, "wallet.dat")
+	defer writeWalletStateFile(wallet, "wallet.dat")
 
 	// check if parameters potentially include sub commands
 	if len(os.Args) < 2 {

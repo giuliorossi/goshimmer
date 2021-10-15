@@ -159,10 +159,11 @@ func writeWalletStateFile(wallet *wallet.Wallet, filename string) {
 			panic(err)
 		}
 	}
-	err = os.WriteFile(filename, wallet.ExportState(), 0o644)
-	if err != nil {
-		panic(err)
-	}
+	// err = os.WriteFile(filename, wallet.ExportState(), 0o644)
+	fmt.Println("####"+base58.Encode(wallet.ExportState())+"####")
+	// if err != nil {
+	// 	panic(err)
+	// }
 }
 
 func printUsage(command *flag.FlagSet, optionalErrorMessage ...string) {
